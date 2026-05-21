@@ -7,8 +7,12 @@
 
 import Foundation
 
-struct Order{
+// A simple model that represents a single order
+struct Order {
+
+    // The name of the item being ordered (e.g. "Bagel", "Coffee")
     let orderNames: String
+
+    // The name of the customer who placed the order
     let customerName: String
-    
 }
