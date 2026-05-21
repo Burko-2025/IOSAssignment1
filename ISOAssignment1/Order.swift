@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct Order{
+    let orderNames: String
+    let customerName: String
+    
+}

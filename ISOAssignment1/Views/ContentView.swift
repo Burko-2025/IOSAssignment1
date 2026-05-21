@@ -8,17 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var currentPage = 0
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $currentPage) {
+
+            WelcomeView()
+                .tag(0)
+
+            ForEach(0..<5) { index in
+                OrdersView(
+                    index: index,
+                    currentPage: currentPage
+                )
+                    .tag(index + 1)
+            }
         }
-        .padding()
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
 }
-
 #Preview {
     ContentView()
 }
