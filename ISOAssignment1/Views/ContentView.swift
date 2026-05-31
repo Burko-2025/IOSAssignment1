@@ -9,34 +9,48 @@ import SwiftUI
 
 struct ContentView: View {
 
-    // Tracks which page the user is currently on in the TabView
+    // Keeps track of the currently displayed page in the TabView
     @State private var currentPage = 0
+
+    // Creates a shared order history object that persists
+    // while the app is running
+    @StateObject private var historyStore = HistoryStore()
 
     var body: some View {
 
-        // TabView creates a swipeable page-style interface
+        // Page-based navigation container
         TabView(selection: $currentPage) {
 
-            // First page: Welcome screen
-            WelcomeView()
-                .tag(0) // Assigns this view the index 0 so it matches currentPage
+            // First page shown when the app launches
+            WelcomeView(selectedPage: $currentPage)
+                .tag(0)
 
-            // Creates 5 order pages using a loop (0 to 4)
-            ForEach(0..<5) { index in
+            // Creates an order page for each customer
+            ForEach(0..<CustomerName.customers.count, id: \.self) { index in
 
                 OrdersView(
-                    index: index,           // Which customer/order data to show
-                    currentPage: currentPage // Pass current page for UI updates (like highlighting)
+                    index: index,
+                    currentPage: $currentPage,
+                    historyStore: historyStore
                 )
-                .tag(index + 1) // Tags pages 1–5 so swipe position updates currentPage
+                // Tags each page so TabView knows which page is selected
+                .tag(index + 1)
             }
+
+            // Final page displaying all completed orders
+            OrderSummaryView(
+                historyStore: historyStore,
+                currentPage: $currentPage
+            )
+            .tag(CustomerName.customers.count + 1)
         }
 
-        // Makes the TabView behave like swipeable pages (horizontal paging dots hidden)
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        // Uses a page-style TabView and hides the default page indicators
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
+// Preview for Xcode Canvas
 #Preview {
     ContentView()
 }

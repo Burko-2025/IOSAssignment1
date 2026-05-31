@@ -7,6 +7,7 @@ struct HeaderView: View {
 
     // The current page index from the TabView (used to highlight the correct circle)
     let currentPage: Int
+    
 
     var body: some View {
 
@@ -19,19 +20,17 @@ struct HeaderView: View {
             // Horizontal row of numbered circle icons (1 to 5)
             HStack {
 
-                // Creates numbers 1 through 5 dynamically
-                ForEach(1...5, id: \.self) { number in
+                ForEach(0..<CustomerName.customers.count, id: \.self) { index in
 
-                    Image(systemName: "\(number).circle.fill")
-
-                        // Changes color depending on whether this number matches the current page
+                    Image(systemName: "\(index + 1).circle.fill")
                         .foregroundColor(
-                            currentPage == number
-                            ? .blue   // highlighted (active page)
-                            : .gray   // inactive page
+                            currentPage == index + 1
+                            ? .blue
+                            : .gray
                         )
                 }
             }
+            
             .font(.title2)
         }
     }
